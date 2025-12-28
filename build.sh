@@ -21,6 +21,7 @@ ARCH=$(jq -r '.distro.arch' "$CONFIG_FILE")
 HOST_OS=$(jq -r '.host_os' "$CONFIG_FILE")
 TARGET_BASE=$(jq -r '.target_base' "$CONFIG_FILE")
 TARGET_VERSION=$(jq -r '.target_version' "$CONFIG_FILE")
+echo "Parsed TARGET_VERSION=$TARGET_VERSION"
 PACKAGES=$(jq -r '.packages.base[]' "$CONFIG_FILE" | tr '\n' ' ')
 KERNEL_VERSION=$(jq -r '.kernel.version' "$CONFIG_FILE")
 INIT_SYSTEM=$(jq -r '.init' "$CONFIG_FILE")
