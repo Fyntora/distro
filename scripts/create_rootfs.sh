@@ -6,8 +6,6 @@ set -e
 ROOTFS_DIR="build/rootfs"
 
 echo "Creating root filesystem in $ROOTFS_DIR for $TARGET_BASE"
-echo "TARGET_VERSION=$TARGET_VERSION ARCH=$ARCH"
-env | grep TARGET
 
 # Create directory
 mkdir -p "$ROOTFS_DIR"
