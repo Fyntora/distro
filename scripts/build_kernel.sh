@@ -9,6 +9,12 @@ KERNEL_URL="https://cdn.kernel.org/pub/linux/kernel/v6.x/$KERNEL_SRC"
 
 echo "Building kernel $KERNEL_VERSION"
 
+# Install build dependencies if on Ubuntu
+if [ "$HOST_OS" = "ubuntu" ]; then
+    sudo apt update
+    sudo apt install -y build-essential flex bison libssl-dev libelf-dev
+fi
+
 mkdir -p "$KERNEL_DIR"
 cd "$KERNEL_DIR"
 

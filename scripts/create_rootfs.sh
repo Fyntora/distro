@@ -11,6 +11,10 @@ echo "Creating root filesystem in $ROOTFS_DIR for $TARGET_BASE"
 mkdir -p "$ROOTFS_DIR"
 
 if [ "$TARGET_BASE" = "ubuntu" ]; then
+    # Install debootstrap if needed
+    if ! command -v debootstrap >/dev/null; then
+        sudo apt update && sudo apt install -y debootstrap
+    fi
     # Use debootstrap for Ubuntu
     debootstrap --arch="$ARCH" jammy "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
