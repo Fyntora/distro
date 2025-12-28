@@ -12,11 +12,11 @@ echo "Generating ISO from $ROOTFS_DIR"
 echo "Boot files in rootfs:"
 ls -la "$ROOTFS_DIR"/boot/
 
-# Generate initramfs using dracut
-if chroot "$ROOTFS_DIR" which dracut >/dev/null 2>&1; then
-    chroot "$ROOTFS_DIR" dracut --kver "$KERNEL_VERSION" /boot/initrd.img
+# Generate initramfs using mkinitramfs
+if chroot "$ROOTFS_DIR" which mkinitramfs >/dev/null 2>&1; then
+    chroot "$ROOTFS_DIR" mkinitramfs -o /boot/initrd.img "$KERNEL_VERSION"
 else
-    echo "Dracut not found in rootfs, skipping initrd"
+    echo "mkinitramfs not found in rootfs, skipping initrd"
 fi
 
 # Create bootable ISO using grub-mkrescue

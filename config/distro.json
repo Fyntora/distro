@@ -18,7 +18,7 @@
   "target_version": "jammy",
   "packages": {
     "base": ["base-files", "libc6", "bash", "coreutils", "systemd"],
-    "extra": ["vim", "git", "neofetch", "dracut"],
+    "extra": ["vim", "git", "neofetch", "initramfs-tools"],
     "repos": ["http://us.archive.ubuntu.com/ubuntu/ jammy main restricted"]
   },
   "kernel": {

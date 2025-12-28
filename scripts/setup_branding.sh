@@ -17,6 +17,22 @@ PRETTY_NAME="$DISTRO_NAME $VERSION"
 HOME_URL="https://fyntora.os"
 EOF
 
+# Set hostname
+echo "$DISTRO_NAME" > "$ROOTFS_DIR/etc/hostname"
+
+# Set hosts
+cat > "$ROOTFS_DIR/etc/hosts" << EOF
+127.0.0.1 localhost
+127.0.1.1 $DISTRO_NAME
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+EOF
+
 # Create neofetch config
 mkdir -p "$ROOTFS_DIR/etc/neofetch"
 LOGO=$(jq -r '.distro.logo[]' "$CONFIG_FILE" | tr '\n' '\\n')
