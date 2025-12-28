@@ -22,7 +22,7 @@
     "repos": ["http://archive.ubuntu.com/ubuntu/ noble main restricted"]
   },
   "kernel": {
-    "version": "6.6",
+    "version": "6.6.0",
     "config": "config/kernel.config"
   },
   "init": "systemd",

@@ -4,15 +4,15 @@
 set -e
 
 KERNEL_DIR="build/kernel"
-KERNEL_SRC="linux-$KERNEL_VERSION.tar.xz"
-KERNEL_URL="https://cdn.kernel.org/pub/linux/kernel/v6.x/$KERNEL_SRC"
+KERNEL_SRC="linux-6.6.tar.xz"
+KERNEL_URL="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.tar.xz"
 
-echo "Building kernel $KERNEL_VERSION"
+echo "Building kernel 6.6.0"
 
 # Install build dependencies if on Ubuntu
 if [ "$HOST_OS" = "ubuntu" ]; then
     sudo apt update
-    sudo apt install -y build-essential flex bison libssl-dev libelf-dev xorriso:
+    sudo apt install -y build-essential flex bison libssl-dev libelf-dev
 fi
 
 mkdir -p "$KERNEL_DIR"
@@ -24,7 +24,7 @@ if [ ! -f "$KERNEL_SRC" ]; then
     tar -xf "$KERNEL_SRC"
 fi
 
-cd linux-$KERNEL_VERSION
+cd linux-6.6
 
 # Copy config
 if [ -f "../../../config/kernel.config" ]; then

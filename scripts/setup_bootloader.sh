@@ -18,7 +18,7 @@ set default=0
 set timeout=5
 
 menuentry "Fyntora Linux" {
-    linux /boot/vmlinuz root=/dev/sda1
+    linux /boot/vmlinuz-6.6.0 root=/dev/sda1
     initrd /boot/initrd.img
 }
 EOF
