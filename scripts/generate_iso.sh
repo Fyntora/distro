@@ -13,11 +13,7 @@ echo "Boot files in rootfs:"
 ls -la "$ROOTFS_DIR"/boot/
 
 # Generate initramfs using mkinitramfs
-if chroot "$ROOTFS_DIR" which mkinitramfs >/dev/null 2>&1; then
-    chroot "$ROOTFS_DIR" mkinitramfs -o /boot/initrd.img "$KERNEL_VERSION"
-else
-    echo "mkinitramfs not found in rootfs, skipping initrd"
-fi
+chroot "$ROOTFS_DIR" /usr/sbin/mkinitramfs -o /boot/initrd.img "$KERNEL_VERSION" 2>/dev/null || echo "mkinitramfs failed, skipping initrd"
 
 # Create bootable ISO using grub-mkrescue
 grub-mkrescue -o "$ISO_FILE" "$ROOTFS_DIR"
