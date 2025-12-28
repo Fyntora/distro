@@ -48,6 +48,10 @@ ROOTFS_DIR="../rootfs"
 make INSTALLKERNEL=no INSTALL_PATH="$ROOTFS_DIR/boot" install
 make INSTALL_MOD_PATH="$ROOTFS_DIR" modules_install
 
+# List boot files
+echo "Boot files:"
+ls -la "$ROOTFS_DIR"/boot/
+
 cd ../..
 
 echo "Kernel built and installed"
