@@ -12,7 +12,7 @@ echo "Building kernel $KERNEL_VERSION"
 # Install build dependencies if on Ubuntu
 if [ "$HOST_OS" = "ubuntu" ]; then
     sudo apt update
-    sudo apt install -y build-essential flex bison libssl-dev libelf-dev
+    sudo apt install -y build-essential flex bison libssl-dev libelf-dev xorriso:
 fi
 
 mkdir -p "$KERNEL_DIR"
