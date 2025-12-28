@@ -33,6 +33,10 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 EOF
 
+# Add default user
+chroot "$ROOTFS_DIR" useradd -m -s /bin/bash ubuntu
+echo 'ubuntu:ubuntu' | chroot "$ROOTFS_DIR" chpasswd
+
 # Create neofetch config
 mkdir -p "$ROOTFS_DIR/etc/neofetch"
 LOGO=$(jq -r '.distro.logo[]' "$CONFIG_FILE" | tr '\n' '\\n')
