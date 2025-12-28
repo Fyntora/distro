@@ -19,7 +19,7 @@
   "packages": {
     "base": ["base-files", "libc6", "bash", "coreutils", "systemd"],
     "extra": ["vim", "git", "neofetch"],
-    "repos": ["http://archive.ubuntu.com/ubuntu/ jammy main restricted"]
+    "repos": ["http://us.archive.ubuntu.com/ubuntu/ jammy main restricted"]
   },
   "kernel": {
     "version": "6.6.0",

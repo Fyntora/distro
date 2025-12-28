@@ -22,11 +22,10 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
         ARCH_DEB="$ARCH"
     fi
     # Use debootstrap for Ubuntu
-    debootstrap --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
+    debootstrap --no-check-gpg --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://us.archive.ubuntu.com/ubuntu/
 
     # Ensure boot directory exists
     mkdir -p "$ROOTFS_DIR"/boot
-    echo "Boot dir created: $(ls -d "$ROOTFS_DIR"/boot)"
 
     # Mount and install extra packages
     mount -t proc proc "$ROOTFS_DIR/proc"
@@ -43,19 +42,13 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     umount "$ROOTFS_DIR/sys"
     umount "$ROOTFS_DIR/proc"
 elif [ "$TARGET_BASE" = "opensuse" ]; then
-    # Install base packages using zypper in chroot
-    mount -t proc proc "$ROOTFS_DIR/proc"
-    mount -t sysfs sys "$ROOTFS_DIR/sys"
-    mount --bind /dev "$ROOTFS_DIR/dev"
-    mount --bind /dev/pts "$ROOTFS_DIR/dev/pts"
+    # Create minimal rootfs structure
+    mkdir -p "$ROOTFS_DIR"/{bin,boot,dev,etc,home,lib,lib64,mnt,opt,proc,root,sbin,srv,sys,tmp,usr,var}
+    mkdir -p "$ROOTFS_DIR"/usr/{bin,lib,local,share}
+    mkdir -p "$ROOTFS_DIR"/var/{log,run,spool}
 
-    chroot "$ROOTFS_DIR" zypper --gpg-auto-import-keys install -y $PACKAGES
-
-    # Unmount
-    umount "$ROOTFS_DIR/dev/pts"
-    umount "$ROOTFS_DIR/dev"
-    umount "$ROOTFS_DIR/sys"
-    umount "$ROOTFS_DIR/proc"
+    # Install base packages using zypper
+    zypper --root "$ROOTFS_DIR" --gpg-auto-import-keys install -y $PACKAGES
 else
     echo "Unsupported target base: $TARGET_BASE"
     exit 1
