@@ -44,7 +44,7 @@ else
 fi
 
 # Install to rootfs
-ROOTFS_DIR="../rootfs"
+ROOTFS_DIR="../../rootfs"
 mkdir -p "$ROOTFS_DIR"/boot
 # Manually install kernel files
 cp arch/x86/boot/bzImage "$ROOTFS_DIR"/boot/vmlinuz-6.6.0
