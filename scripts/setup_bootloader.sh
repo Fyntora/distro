@@ -17,9 +17,6 @@ cat > "$ROOTFS_DIR"/boot/grub/grub.cfg << EOF
 set default=0
 set timeout=5
 
-insmod iso9660
-set root=(cd)
-
 menuentry "Fyntora Linux" {
     linux /boot/vmlinuz-6.6.0 root=/dev/sr0
     initrd /boot/initrd.img
