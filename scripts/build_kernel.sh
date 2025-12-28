@@ -45,6 +45,7 @@ fi
 
 # Install to rootfs
 ROOTFS_DIR="../rootfs"
+mkdir -p "$ROOTFS_DIR"/boot
 make INSTALLKERNEL=no INSTALL_PATH="$ROOTFS_DIR/boot" install
 make INSTALL_MOD_PATH="$ROOTFS_DIR" modules_install
 
