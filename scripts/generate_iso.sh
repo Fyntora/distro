@@ -19,8 +19,6 @@ xorriso -as mkisofs \
     -no-emul-boot \
     -boot-load-size 4 \
     -boot-info-table \
-    --efi-boot boot/grub/efi.img \
-    -efi-boot-part --efi-boot-image \
     --protective-msdos-label \
     "$ROOTFS_DIR"
 
