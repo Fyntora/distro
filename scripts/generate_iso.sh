@@ -8,18 +8,15 @@ ISO_FILE="build/fyntora.iso"
 
 echo "Generating ISO from $ROOTFS_DIR"
 
-# Generate initramfs (simple version, assume dracut or mkinitrd)
-# For simplicity, assume kernel and initrd are copied
-# In real, use dracut --hostonly --kver $(uname -r) -f "$ROOTFS_DIR"/boot/initrd.img
+# Generate initramfs using dracut
+if command -v dracut >/dev/null; then
+    chroot "$ROOTFS_DIR" dracut --kver "$KERNEL_VERSION" /boot/initrd.img
+else
+    # Fallback, create simple initrd
+    echo "Dracut not found, skipping initrd"
+fi
 
-# Create ISO using xorriso
-xorriso -as mkisofs \
-    -o "$ISO_FILE" \
-    -b boot/grub/i386-pc/eltorito.img \
-    -no-emul-boot \
-    -boot-load-size 4 \
-    -boot-info-table \
-    --protective-msdos-label \
-    "$ROOTFS_DIR"
+# Create bootable ISO using grub-mkrescue
+grub-mkrescue -o "$ISO_FILE" "$ROOTFS_DIR"
 
 echo "ISO generated: $ISO_FILE"

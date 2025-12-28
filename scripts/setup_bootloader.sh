@@ -10,9 +10,7 @@ echo "Setting up bootloader in $ROOTFS_DIR"
 # Create grub directory
 mkdir -p "$ROOTFS_DIR"/boot/grub
 
-# Copy grub images from host
-cp -r /usr/lib/grub/i386-pc "$ROOTFS_DIR"/boot/grub/
-ls "$ROOTFS_DIR"/boot/grub/i386-pc/
+# Grub will be handled by grub-mkrescue
 
 # Write grub.cfg
 cat > "$ROOTFS_DIR"/boot/grub/grub.cfg << EOF
