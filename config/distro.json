@@ -5,10 +5,12 @@
     "arch": "x86_64",
     "description": "Professional Linux Distro"
   },
+  "host_os": "ubuntu",
+  "target_base": "ubuntu",
   "packages": {
-    "base": ["filesystem", "glibc", "bash", "coreutils", "systemd"],
+    "base": ["base-files", "libc6", "bash", "coreutils", "systemd"],
     "extra": ["vim", "git"],
-    "repos": ["http://download.opensuse.org/distribution/leap/15.5/repo/oss/"]
+    "repos": ["http://archive.ubuntu.com/ubuntu/ jammy main restricted"]
   },
   "kernel": {
     "version": "6.6",

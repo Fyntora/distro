@@ -18,13 +18,15 @@ echo "Parsing configuration..."
 DISTRO_NAME=$(jq -r '.distro.name' "$CONFIG_FILE")
 VERSION=$(jq -r '.distro.version' "$CONFIG_FILE")
 ARCH=$(jq -r '.distro.arch' "$CONFIG_FILE")
+HOST_OS=$(jq -r '.host_os' "$CONFIG_FILE")
+TARGET_BASE=$(jq -r '.target_base' "$CONFIG_FILE")
 PACKAGES=$(jq -r '.packages.base[]' "$CONFIG_FILE" | tr '\n' ' ')
 KERNEL_VERSION=$(jq -r '.kernel.version' "$CONFIG_FILE")
 INIT_SYSTEM=$(jq -r '.init' "$CONFIG_FILE")
 BOOTLOADER=$(jq -r '.bootloader' "$CONFIG_FILE")
 OUTPUT_ISO=$(jq -r '.output' "$CONFIG_FILE")
 
-export DISTRO_NAME VERSION ARCH PACKAGES KERNEL_VERSION INIT_SYSTEM BOOTLOADER OUTPUT_ISO
+export DISTRO_NAME VERSION ARCH HOST_OS TARGET_BASE PACKAGES KERNEL_VERSION INIT_SYSTEM BOOTLOADER OUTPUT_ISO
 
 # Build kernel (with cache)
 if [ ! -d "build/cache/kernel" ] || [ "build/cache/kernel/version" != "$KERNEL_VERSION" ]; then

@@ -5,23 +5,46 @@ set -e
 
 ROOTFS_DIR="build/rootfs"
 
-echo "Creating root filesystem in $ROOTFS_DIR"
+echo "Creating root filesystem in $ROOTFS_DIR for $TARGET_BASE"
 
 # Create directory
 mkdir -p "$ROOTFS_DIR"
 
-# Install base packages using zypper in chroot
-mount -t proc proc "$ROOTFS_DIR/proc"
-mount -t sysfs sys "$ROOTFS_DIR/sys"
-mount --bind /dev "$ROOTFS_DIR/dev"
-mount --bind /dev/pts "$ROOTFS_DIR/dev/pts"
+if [ "$TARGET_BASE" = "ubuntu" ]; then
+    # Use debootstrap for Ubuntu
+    debootstrap --arch="$ARCH" jammy "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
-chroot "$ROOTFS_DIR" zypper --gpg-auto-import-keys install -y $PACKAGES
+    # Mount and install extra packages
+    mount -t proc proc "$ROOTFS_DIR/proc"
+    mount -t sysfs sys "$ROOTFS_DIR/sys"
+    mount --bind /dev "$ROOTFS_DIR/dev"
+    mount --bind /dev/pts "$ROOTFS_DIR/dev/pts"
 
-# Unmount
-umount "$ROOTFS_DIR/dev/pts"
-umount "$ROOTFS_DIR/dev"
-umount "$ROOTFS_DIR/sys"
-umount "$ROOTFS_DIR/proc"
+    chroot "$ROOTFS_DIR" apt update
+    chroot "$ROOTFS_DIR" apt install -y $PACKAGES
+
+    # Unmount
+    umount "$ROOTFS_DIR/dev/pts"
+    umount "$ROOTFS_DIR/dev"
+    umount "$ROOTFS_DIR/sys"
+    umount "$ROOTFS_DIR/proc"
+elif [ "$TARGET_BASE" = "opensuse" ]; then
+    # Install base packages using zypper in chroot
+    mount -t proc proc "$ROOTFS_DIR/proc"
+    mount -t sysfs sys "$ROOTFS_DIR/sys"
+    mount --bind /dev "$ROOTFS_DIR/dev"
+    mount --bind /dev/pts "$ROOTFS_DIR/dev/pts"
+
+    chroot "$ROOTFS_DIR" zypper --gpg-auto-import-keys install -y $PACKAGES
+
+    # Unmount
+    umount "$ROOTFS_DIR/dev/pts"
+    umount "$ROOTFS_DIR/dev"
+    umount "$ROOTFS_DIR/sys"
+    umount "$ROOTFS_DIR/proc"
+else
+    echo "Unsupported target base: $TARGET_BASE"
+    exit 1
+fi
 
 echo "Root filesystem created"
