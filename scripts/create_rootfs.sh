@@ -26,6 +26,7 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
 
     # Ensure boot directory exists
     mkdir -p "$ROOTFS_DIR"/boot
+    echo "Boot dir created: $(ls -d "$ROOTFS_DIR"/boot)"
 
     # Mount and install extra packages
     mount -t proc proc "$ROOTFS_DIR/proc"
