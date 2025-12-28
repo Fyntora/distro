@@ -46,7 +46,10 @@ fi
 # Install to rootfs
 ROOTFS_DIR="../rootfs"
 mkdir -p "$ROOTFS_DIR"/boot
-make INSTALLKERNEL=no INSTALL_PATH="$ROOTFS_DIR/boot" install
+# Manually install kernel files
+cp arch/x86/boot/bzImage "$ROOTFS_DIR"/boot/vmlinuz-6.6.0
+cp System.map "$ROOTFS_DIR"/boot/System.map-6.6.0
+cp .config "$ROOTFS_DIR"/boot/config-6.6.0
 make INSTALL_MOD_PATH="$ROOTFS_DIR" modules_install
 
 # List boot files
