@@ -7,10 +7,11 @@
   },
   "host_os": "ubuntu",
   "target_base": "ubuntu",
+  "target_version": "noble",
   "packages": {
     "base": ["base-files", "libc6", "bash", "coreutils", "systemd"],
     "extra": ["vim", "git"],
-    "repos": ["http://archive.ubuntu.com/ubuntu/ jammy main restricted"]
+    "repos": ["http://archive.ubuntu.com/ubuntu/ noble main restricted"]
   },
   "kernel": {
     "version": "6.6",

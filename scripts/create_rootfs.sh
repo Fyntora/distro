@@ -16,7 +16,7 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
         sudo apt update && sudo apt install -y debootstrap
     fi
     # Use debootstrap for Ubuntu
-    debootstrap --arch="$ARCH" jammy "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
+    debootstrap --arch="$ARCH" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
     # Mount and install extra packages
     mount -t proc proc "$ROOTFS_DIR/proc"
