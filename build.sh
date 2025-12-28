@@ -28,6 +28,15 @@ OUTPUT_ISO=$(jq -r '.output' "$CONFIG_FILE")
 
 export DISTRO_NAME VERSION ARCH HOST_OS TARGET_BASE PACKAGES KERNEL_VERSION INIT_SYSTEM BOOTLOADER OUTPUT_ISO
 
+# Create root filesystem (with cache)
+if [ ! -d "build/cache/rootfs" ]; then
+    echo "Creating root filesystem..."
+    bash scripts/create_rootfs.sh
+    mkdir -p build/cache/rootfs
+else
+    echo "Using cached rootfs"
+fi
+
 # Build kernel (with cache)
 if [ ! -d "build/cache/kernel" ] || [ "build/cache/kernel/version" != "$KERNEL_VERSION" ]; then
     echo "Building kernel..."
@@ -36,15 +45,6 @@ if [ ! -d "build/cache/kernel" ] || [ "build/cache/kernel/version" != "$KERNEL_V
     echo "$KERNEL_VERSION" > build/cache/kernel/version
 else
     echo "Using cached kernel"
-fi
-
-# Create root filesystem (with cache)
-if [ ! -d "build/cache/rootfs" ]; then
-    echo "Creating root filesystem..."
-    bash scripts/create_rootfs.sh
-    mkdir -p build/cache/rootfs
-else
-    echo "Using cached rootfs"
 fi
 
 # Setup init system
