@@ -3,14 +3,22 @@
     "name": "Fyntora",
     "version": "1.0",
     "arch": "x86_64",
-    "description": "Professional Linux Distro"
+    "description": "Professional Linux Distro",
+    "logo": [
+      "  ______ _           _         ",
+      " |  ____| |         | |        ",
+      " | |__  | |_   _ ___| |_ _ __  ",
+      " |  __| | | | | / __| __| '_ \\ ",
+      " | |    | | |_| \\__ \\ |_| | | |",
+      " |_|    |_|\\__,_|___/\\__|_| |_|"
+    ]
   },
   "host_os": "ubuntu",
   "target_base": "ubuntu",
   "target_version": "noble",
   "packages": {
     "base": ["base-files", "libc6", "bash", "coreutils", "systemd"],
-    "extra": ["vim", "git"],
+    "extra": ["vim", "git", "neofetch"],
     "repos": ["http://archive.ubuntu.com/ubuntu/ noble main restricted"]
   },
   "kernel": {

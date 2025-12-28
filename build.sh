@@ -27,7 +27,7 @@ INIT_SYSTEM=$(jq -r '.init' "$CONFIG_FILE")
 BOOTLOADER=$(jq -r '.bootloader' "$CONFIG_FILE")
 OUTPUT_ISO=$(jq -r '.output' "$CONFIG_FILE")
 
-export DISTRO_NAME VERSION ARCH HOST_OS TARGET_BASE TARGET_VERSION PACKAGES KERNEL_VERSION INIT_SYSTEM BOOTLOADER OUTPUT_ISO
+export DISTRO_NAME VERSION ARCH HOST_OS TARGET_BASE TARGET_VERSION PACKAGES KERNEL_VERSION INIT_SYSTEM BOOTLOADER OUTPUT_ISO CONFIG_FILE
 
 # Create root filesystem (with cache)
 if [ ! -d "build/cache/rootfs" ]; then
@@ -51,6 +51,10 @@ fi
 # Setup init system
 echo "Setting up init system..."
 bash scripts/setup_init.sh
+
+# Setup branding
+echo "Setting up branding..."
+bash scripts/setup_branding.sh
 
 # Configure bootloader
 echo "Configuring bootloader..."
