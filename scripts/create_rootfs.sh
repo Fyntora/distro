@@ -34,7 +34,9 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     mount --bind /dev/pts "$ROOTFS_DIR/dev/pts"
 
     chroot "$ROOTFS_DIR" apt update
+    chroot build/rootfs apt install -y initramfs-tools
     chroot "$ROOTFS_DIR" apt install -y $PACKAGES
+    chroot build/rootfs /usr/sbin/mkinitramfs -o /boot/initrd.img 6.6.0
 
     # Unmount
     umount "$ROOTFS_DIR/dev/pts"
