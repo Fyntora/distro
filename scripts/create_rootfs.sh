@@ -24,6 +24,9 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     # Use debootstrap for Ubuntu
     debootstrap --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
+    # Ensure boot directory exists
+    mkdir -p "$ROOTFS_DIR"/boot
+
     # Mount and install extra packages
     mount -t proc proc "$ROOTFS_DIR/proc"
     mount -t sysfs sys "$ROOTFS_DIR/sys"
