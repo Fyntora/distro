@@ -15,8 +15,14 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     if ! command -v debootstrap >/dev/null; then
         sudo apt update && sudo apt install -y debootstrap
     fi
+    # Map arch
+    if [ "$ARCH" = "x86_64" ]; then
+        ARCH_DEB="amd64"
+    else
+        ARCH_DEB="$ARCH"
+    fi
     # Use debootstrap for Ubuntu
-    debootstrap --arch="$ARCH" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
+    debootstrap --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
     # Mount and install extra packages
     mount -t proc proc "$ROOTFS_DIR/proc"
