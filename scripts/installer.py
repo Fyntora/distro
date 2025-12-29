@@ -93,6 +93,8 @@ def install_grub(mount_point, disk, efi_part, dualboot):
     
     uefi = os.path.exists("/sys/firmware/efi")
     if uefi:
+        run_cmd(["chroot", mount_point, "apt", "update"])
+        run_cmd(["chroot", mount_point, "apt", "install", "-y", "grub-efi-amd64"])
         run_cmd(["chroot", mount_point, "grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi", "--bootloader-id=Fyntora", disk])
     else:
         run_cmd(["chroot", mount_point, "grub-install", disk])
