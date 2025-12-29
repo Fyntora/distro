@@ -7,7 +7,8 @@ ROOTFS_DIR="build/rootfs"
 
 echo "Creating root filesystem in $ROOTFS_DIR for $TARGET_BASE"
 
-# Create directory
+# Clean and create directory
+rm -rf "$ROOTFS_DIR"
 mkdir -p "$ROOTFS_DIR"
 
 if [ "$TARGET_BASE" = "ubuntu" ]; then
@@ -22,7 +23,7 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
         ARCH_DEB="$ARCH"
     fi
     # Use debootstrap for Ubuntu
-    debootstrap --no-check-gpg --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://us.archive.ubuntu.com/ubuntu/
+    debootstrap --no-check-gpg --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
 
     # Ensure boot directory exists
     mkdir -p "$ROOTFS_DIR"/boot
