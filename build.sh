@@ -60,7 +60,7 @@ bash scripts/setup_branding.sh
 
 # Configure bootloader
 echo "Configuring bootloader..."
-bash scripts/setup_bootloader.sh
+# bash scripts/setup_bootloader.sh
 
 # Generate initramfs and ISO
 echo "Generating ISO image..."
