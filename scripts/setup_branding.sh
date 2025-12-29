@@ -69,4 +69,12 @@ $LOGO
 )
 EOF
 
+# Add auto-run installer to root .bashrc
+cat >> "$ROOTFS_DIR/root/.bashrc" << 'EOF'
+if [ ! -f /etc/fyntora_installed ]; then
+    echo "Welcome to Fyntora installer!"
+    python3 /usr/local/bin/installer.py
+fi
+EOF
+
 echo "Branding configured"

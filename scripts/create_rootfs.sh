@@ -39,6 +39,9 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     chroot "$ROOTFS_DIR" /usr/sbin/mkinitramfs -o /boot/initrd.img 6.6.0
     # Disable Ubuntu welcome message
     chroot "$ROOTFS_DIR" chmod -x /etc/update-motd.d/* || true
+    # Copy installer script
+    cp scripts/installer.py "$ROOTFS_DIR/usr/local/bin/installer.py"
+    chmod +x "$ROOTFS_DIR/usr/local/bin/installer.py"
 
     # Unmount
     umount "$ROOTFS_DIR/dev/pts"
