@@ -4,10 +4,10 @@ import os
 import sys
 
 def run_cmd(cmd, shell=False):
-    result = subprocess.run(cmd if shell else cmd.split(), shell=shell, capture_output=True, text=True)
+    result = subprocess.run(cmd, shell=shell, capture_output=True, text=True)
     if result.returncode != 0:
         print(f"Error: {result.stderr}")
-        raise Exception(f"Command failed: {' '.join(cmd) if not shell else cmd}")
+        raise Exception(f"Command failed: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     return result.stdout.strip()
 
 def list_disks():
@@ -40,19 +40,19 @@ def use_zfs():
 
 def partition_disk(disk, use_zfs):
     # Wipe and create GPT
-    run_cmd(["parted", disk, "mklabel", "gpt"])
+    run_cmd(["parted", "-s", disk, "mklabel", "gpt"])
     
     # EFI partition 1MiB to 1GiB
-    run_cmd(["parted", disk, "mkpart", "EFI", "fat32", "1MiB", "1GiB"])
-    run_cmd(["parted", disk, "set", "1", "esp", "on"])
+    run_cmd(["parted", "-s", disk, "mkpart", "EFI", "fat32", "1MiB", "1GiB"])
+    run_cmd(["parted", "-s", disk, "set", "1", "esp", "on"])
     
     # Root partition 1GiB to end (or -4GiB for swap)
     if use_zfs:
-        run_cmd(["parted", disk, "mkpart", "root", "1GiB", "-4GiB"])
-        run_cmd(["parted", disk, "mkpart", "swap", "linux-swap", "-4GiB", "100%"])
+        run_cmd(["parted", "-s", disk, "mkpart", "root", "1GiB", "-4GiB"])
+        run_cmd(["parted", "-s", disk, "mkpart", "swap", "linux-swap", "-4GiB", "100%"])
         parts = [f"{disk}1", f"{disk}2", f"{disk}3"]  # EFI, root, swap
     else:
-        run_cmd(["parted", disk, "mkpart", "root", "ext4", "1GiB", "100%"])
+        run_cmd(["parted", "-s", disk, "mkpart", "root", "ext4", "1GiB", "100%"])
         parts = [f"{disk}1", f"{disk}2"]  # EFI, root
     
     return parts
