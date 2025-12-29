@@ -76,6 +76,13 @@ def copy_rootfs(root_part, use_zfs):
         run_cmd(["zfs", "set", "mountpoint=/mnt/install", "rpool/ROOT"])
     else:
         run_cmd(["mount", root_part, mount_point])
+    # Check if writable
+    try:
+        with open(f"{mount_point}/test_write", "w") as f:
+            f.write("test")
+        os.remove(f"{mount_point}/test_write")
+    except:
+        raise Exception(f"Target filesystem at {mount_point} is readonly")
     print("Copying rootfs...")
     excludes = ["--exclude=/mnt", "--exclude=/proc", "--exclude=/sys", "--exclude=/dev"]
     run_cmd(["rsync", "-a"] + excludes + ["/", f"{mount_point}/"])
