@@ -24,7 +24,8 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
     fi
     # Use debootstrap for Ubuntu
     debootstrap --no-check-gpg --arch="$ARCH_DEB" "$TARGET_VERSION" "$ROOTFS_DIR" http://archive.ubuntu.com/ubuntu/
-
+    chmod 1777 "$ROOTFS_DIR/tmp"
+    chroot "$ROOTFS_DIR" apt install -y systemd-sysv
     # Ensure boot directory exists
     mkdir -p "$ROOTFS_DIR"/boot
 

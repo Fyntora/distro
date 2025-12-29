@@ -69,12 +69,31 @@ $LOGO
 )
 EOF
 
-# Add auto-run installer to root .bashrc
-cat >> "$ROOTFS_DIR/root/.bashrc" << 'EOF'
-if [ ! -f /etc/fyntora_installed ]; then
-    echo "Welcome to Fyntora installer!"
-    python3 /usr/local/bin/installer.py
-fi
+mkdir -p "$ROOTFS_DIR/etc/systemd/system"
+
+cat > "$ROOTFS_DIR/etc/systemd/system/fyntora-installer.service" << 'EOF'
+[Unit]
+Description=Fyntora Installer
+ConditionPathExists=!/etc/fyntora_installed
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/bin/installer.py
+StandardInput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+
+[Install]
+WantedBy=multi-user.target
 EOF
+
+# Enable installer service
+mkdir -p "$ROOTFS_DIR/etc/systemd/system/multi-user.target.wants"
+ln -sf /etc/systemd/system/fyntora-installer.service \
+   "$ROOTFS_DIR/etc/systemd/system/multi-user.target.wants/fyntora-installer.service"
+
+
 
 echo "Branding configured"
