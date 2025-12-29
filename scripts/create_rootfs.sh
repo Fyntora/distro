@@ -35,6 +35,7 @@ if [ "$TARGET_BASE" = "ubuntu" ]; then
 
     chroot "$ROOTFS_DIR" apt update
     chroot "$ROOTFS_DIR" apt install -y initramfs-tools
+    chroot "$ROOTFS_DIR" apt install -y python3 python3-parted rsync parted dosfstools efibootmgr zfsutils-linux python3-pyzfs os-prober
     chroot "$ROOTFS_DIR" apt install -y $PACKAGES
     chroot "$ROOTFS_DIR" /usr/sbin/mkinitramfs -o /boot/initrd.img 6.6.0
     # Disable Ubuntu welcome message
