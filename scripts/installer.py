@@ -70,10 +70,10 @@ def format_partitions(parts, use_zfs):
             run_cmd(["mkswap", parts[2]])
 
 def copy_rootfs(root_part, use_zfs):
-    mount_point = "/tmp/install"
+    mount_point = "/run/install"
     os.makedirs(mount_point, exist_ok=True)
     if use_zfs:
-        run_cmd(["zfs", "set", "mountpoint=/tmp/install", "rpool/ROOT"])
+        run_cmd(["zfs", "set", "mountpoint=/run/install", "rpool/ROOT"])
     else:
         run_cmd(["mount", root_part, mount_point])
     # Check if writable
@@ -84,7 +84,7 @@ def copy_rootfs(root_part, use_zfs):
     except:
         raise Exception(f"Target filesystem at {mount_point} is readonly")
     print("Copying rootfs...")
-    excludes = ["--exclude=/mnt", "--exclude=/proc", "--exclude=/sys", "--exclude=/dev", "--exclude=/tmp"]
+    excludes = ["--exclude=/mnt", "--exclude=/proc", "--exclude=/sys", "--exclude=/dev", "--exclude=/tmp", "--exclude=/run"]
     run_cmd(["rsync", "-a"] + excludes + ["/", f"{mount_point}/"])
     return mount_point
 
