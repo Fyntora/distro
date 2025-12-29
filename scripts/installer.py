@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import parted
 import subprocess
 import os
 import sys
@@ -12,11 +11,18 @@ def run_cmd(cmd, shell=False):
     return result.stdout.strip()
 
 def list_disks():
-    devices = parted.getAllDevices()
+    result = run_cmd(["lsblk", "-d", "-o", "NAME,SIZE", "-n"])
+    disks = []
     print("Available disks:")
-    for dev in devices:
-        print(f"  {dev.path}: {dev.getSize() / (1024**3):.2f} GB")
-    return [dev.path for dev in devices]
+    for line in result.split('\n'):
+        if line.strip():
+            parts = line.split()
+            if len(parts) >= 2:
+                disk = f"/dev/{parts[0]}"
+                size = parts[1]
+                print(f"  {disk}: {size}")
+                disks.append(disk)
+    return disks
 
 def select_disk():
     disks = list_disks()
@@ -33,35 +39,22 @@ def use_zfs():
     return input("Use ZFS for root filesystem? (yes/no): ").lower() == 'yes'
 
 def partition_disk(disk, use_zfs):
-    device = parted.getDevice(disk)
-    disk_obj = parted.Disk(device)
-    disk_obj.deleteAllPartitions()
-    disk_obj.commit()
+    # Wipe and create GPT
+    run_cmd(["parted", disk, "mklabel", "gpt"])
     
-    efi_size = 1024 * 1024 * 1024  # 1GB EFI
+    # EFI partition 1MiB to 1GiB
+    run_cmd(["parted", disk, "mkpart", "EFI", "fat32", "1MiB", "1GiB"])
+    run_cmd(["parted", disk, "set", "1", "esp", "on"])
+    
+    # Root partition 1GiB to end (or -4GiB for swap)
     if use_zfs:
-        root_size = device.getSize() - efi_size - 4 * 1024 * 1024 * 1024  # Rest -4GB swap
-        swap_size = 4 * 1024 * 1024 * 1024
+        run_cmd(["parted", disk, "mkpart", "root", "1GiB", "-4GiB"])
+        run_cmd(["parted", disk, "mkpart", "swap", "linux-swap", "-4GiB", "100%"])
+        parts = [f"{disk}1", f"{disk}2", f"{disk}3"]  # EFI, root, swap
     else:
-        root_size = device.getSize() - efi_size  # No swap for ZFS
+        run_cmd(["parted", disk, "mkpart", "root", "ext4", "1GiB", "100%"])
+        parts = [f"{disk}1", f"{disk}2"]  # EFI, root
     
-    efi_geom = parted.Geometry(device, 2048, 2048 + int(efi_size / device.sectorSize) - 1)
-    efi_part = parted.Partition(disk_obj, parted.PARTITION_NORMAL, parted.FileSystem(ext2, efi_geom))
-    efi_part.setFlag(parted.PARTITION_BOOT)
-    disk_obj.addPartition(efi_part, parted.Constraint(device))
-    
-    root_geom = parted.Geometry(device, efi_geom.end + 1, efi_geom.end + 1 + int(root_size / device.sectorSize) - 1)
-    root_part = parted.Partition(disk_obj, parted.PARTITION_NORMAL, parted.FileSystem(ext4 if not use_zfs else None, root_geom))
-    disk_obj.addPartition(root_part, parted.Constraint(device))
-    
-    parts = [f"{disk}1", f"{disk}2"]  # EFI, root
-    if not use_zfs:
-        swap_geom = parted.Geometry(device, root_geom.end + 1, device.getLength() - 1)
-        swap_part = parted.Partition(disk_obj, parted.PARTITION_NORMAL, parted.FileSystem(linux_swap, swap_geom))
-        disk_obj.addPartition(swap_part, parted.Constraint(device))
-        parts.append(f"{disk}3")  # Swap
-    
-    disk_obj.commit()
     return parts
 
 def format_partitions(parts, use_zfs):
