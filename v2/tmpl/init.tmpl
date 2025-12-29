@@ -1,0 +1,7 @@
+#!/bin/sh
+# This is essentialy telling the kernel
+# What to do after boot.
+mount -t proc none /proc
+mount -t sysfs none /sys
+echo "Welcome to My Custom Linux!"
+/bin/sh
