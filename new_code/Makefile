@@ -1,6 +1,9 @@
 CXX      := g++
 CXXFLAGS := -std=c++20 -Wall -Wextra -O2
 LDFLAGS  := 
+osname := "VereLinux"
+osversion := "0.1"
+
 
 TARGET   := distro-builder
 SRC := main.cpp \
