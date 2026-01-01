@@ -1,5 +1,10 @@
 #include "builder.hpp"
 #include "module.hpp"
+
+#include "utils/config_parser.hpp"
+
+#include "modules/ubuntu/ubuntu_config_module.hpp"
+
 #include <memory>
 
 // factories
@@ -11,6 +16,12 @@ std::unique_ptr<BuildModule> createUbuntuPackagesModule();
 std::unique_ptr<BuildModule> createCleanupModule();
 
 int main() {
+
+    VereConfigParser cfg;
+    if (!cfg.load("distro.conf")) {
+        return 1;
+    }
+
     // Flame, the `rootfs` is the ouput
     // folder. Not the final name.
     DistroBuilder builder("rootfs");
@@ -18,7 +29,7 @@ int main() {
     builder.addModule(createRootfsModule());
     builder.addModule(createUbuntuBootstrapModule());
     builder.addModule(createChrootMountsModule());
-    builder.addModule(createUbuntuConfigModule());
+    builder.addModule(createUbuntuConfigModule(cfg));
     builder.addModule(createUbuntuPackagesModule());
     builder.addModule(createCleanupModule());
 
