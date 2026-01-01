@@ -1,18 +1,20 @@
-#include "../module.hpp"
-#include "../builder.hpp"
+#include "builder.hpp"
+#include "module.hpp"
+#include <memory>
 
-class BusyboxModule : public BuildModule {
-public:
-    std::string name() const override {
-        return "busybox";
-    }
+std::unique_ptr<BuildModule> createRootfsModule();
+std::unique_ptr<BuildModule> createUbuntuModule();
+std::unique_ptr<BuildModule> createArchModule();
 
-    void run(const std::string& rootfs) override {
-        std::system(("cp /bin/busybox " + rootfs + "/bin/").c_str());
-        std::system(("chroot " + rootfs + " /bin/busybox --install -s").c_str());
-    }
-};
+int main() {
+    DistroBuilder builder("rootfs");
 
-std::unique_ptr<BuildModule> createBusyboxModule() {
-    return std::make_unique<BusyboxModule>();
+    builder.addModule(createRootfsModule());
+
+    // Choose ONE:
+    builder.addModule(createUbuntuModule());
+    // builder.addModule(createArchModule());
+
+    builder.build();
+    return 0;
 }

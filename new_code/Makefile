@@ -3,10 +3,12 @@ CXXFLAGS := -std=c++20 -Wall -Wextra -O2
 LDFLAGS  := 
 
 TARGET   := distro-builder
-SRC      := main.cpp \
-            builder.cpp \
-            modules/rootfs.cpp \
-            modules/busybox.cpp
+SRC := main.cpp \
+       builder.cpp \
+       modules/rootfs.cpp \
+       modules/ubuntu.cpp \
+       modules/arch.cpp
+
 
 OBJ      := $(SRC:.cpp=.o)
 
