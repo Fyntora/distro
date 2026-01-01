@@ -12,4 +12,9 @@ public:
     void build();
 
     static void run(const std::string& cmd);
+
+private:
+    std::string rootfs;
+    std::vector<std::unique_ptr<BuildModule>> modules;
+
 };
