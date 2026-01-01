@@ -1,11 +1,11 @@
-#include "../module.hpp"
+#include "../../module.hpp"
 #include <fstream>
 #include <memory>
 
-class UbuntuConfigModule : public BuildModule {
+class ArchConfigModule : public BuildModule {
 public:
     std::string name() const override {
-        return "ubuntu-config";
+        return "arch-config";
     }
 
     void run(const std::string& rootfs) override {
@@ -23,7 +23,7 @@ public:
     }
 };
 
-std::unique_ptr<BuildModule> createUbuntuConfigModule() {
-    return std::make_unique<UbuntuConfigModule>();
+std::unique_ptr<BuildModule> createArchConfigModule() {
+    return std::make_unique<ArchConfigModule>();
 }
 

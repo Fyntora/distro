@@ -1,5 +1,5 @@
-#include "../module.hpp"
-#include "../builder.hpp"
+#include "../../module.hpp"
+#include "../../builder.hpp"
 
 class UbuntuPackagesModule : public BuildModule {
 public:
