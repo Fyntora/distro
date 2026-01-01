@@ -84,6 +84,8 @@ int main() {
     if (!cfg.load("distro.conf"))
         return 1;
 
+    // This prints the config's
+    // values.
     cfg.print();
 
     std::cout << "Kernel version: " << cfg.get("kernel_version", "default") << "\n";
