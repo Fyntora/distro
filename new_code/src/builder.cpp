@@ -20,8 +20,7 @@ void DistroBuilder::run(const std::string& cmd) {
 
 void DistroBuilder::build() {
     for (auto& m : modules) {
-        std::cout << "[+] Module: " << m->name() << "\n";
+        std::cout << "[+] " << m->name() << "\n";
         m->run(rootfs);
     }
 }
-
