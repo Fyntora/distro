@@ -1,0 +1,11 @@
+[Unit]
+Description=Autorun ArchISO install script
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/root/boot-run.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
