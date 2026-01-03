@@ -28,3 +28,8 @@ qt6-tools
 qt6-translations
 kcrash
 os-prober
+btrfs-progs
+declarative 
+qt5-graphicaleffects 
+qt5-quickcontrols2 
+kirigami2
