@@ -26,5 +26,4 @@ extra-cmake-modules
 ninja
 qt6-tools
 qt6-translations
-glibc
-lib32-glibc
+kcrash
